@@ -56,6 +56,12 @@ label.opt.on{border-color:var(--blue);background:var(--blue-l)}
 .kp{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.kb{flex:1;min-width:34px;padding:6px 0;border:1px solid var(--line);background:var(--card);border-radius:8px;font-size:17px}
 .cr input{flex:1;min-width:0}.rs{color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums}
 @media (max-width:600px){.calc{left:8px;right:8px;width:auto;bottom:calc(70px + env(safe-area-inset-bottom,0px));max-height:72vh}}
+.calc .ch{cursor:move;touch-action:none;user-select:none}
+.rz{position:absolute;right:0;bottom:0;width:28px;height:28px;cursor:nwse-resize;touch-action:none;z-index:3;background:linear-gradient(135deg,transparent 52%,var(--mute) 52%,var(--mute) 60%,transparent 60%,transparent 72%,var(--mute) 72%,var(--mute) 80%,transparent 80%)}
+.chip{display:inline-block;font-size:13px;padding:1px 10px;border:1px solid var(--line);border-radius:999px;color:var(--mute);margin-right:6px}
+.ps{white-space:pre-line;font-family:Georgia,serif;line-height:1.7;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--card);margin-bottom:12px}
+.two{display:grid;gap:16px}@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.wrap.wide{max-width:1000px}
 /* test screen */
 .top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:2px dashed var(--line);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;z-index:5}
 .timer{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
@@ -90,13 +96,22 @@ table{width:100%;border-collapse:collapse}th,td{padding:8px 6px;text-align:left;
 <div id="app"></div>
 <script>
 /* ===== TESTLAR (yangi test qo'shish uchun shu ro'yxatga obyekt qo'shiladi) ===== */
-const TESTS=[{id:"namuna-1",title:"Namuna test 1 · Math",minutes:15,questions:[
-{t:"mc",q:"If 3x + 7 = 25, what is the value of x?",o:["4","6","8","18"],a:1,e:"3x = 18, so x = 6."},
-{t:"mc",q:"The function f is defined by f(x) = x² − 3x + 2. What is the value of f(4)?",o:["2","4","6","10"],a:2,e:"f(4) = 16 − 12 + 2 = 6."},
-{t:"mc",q:"A pyramid has a square base with side length 6 and a height of 5. What is its volume?",o:["30","60","90","180"],a:1,e:"V = ⅓·(6·6)·5 = 60."},
-{t:"mc",q:"Which expression is equivalent to (x + 4)²?",o:["x² + 16","x² + 8x + 16","x² + 4x + 16","x² + 8x + 8"],a:1,e:"(x+4)² = x² + 8x + 16."},
-{t:"spr",q:"If 2(x − 3) = 14, what is the value of x?",a:["10"],e:"x − 3 = 7, so x = 10."},
-{t:"spr",q:"A rectangle has a perimeter of 36 and a length of 11. What is its area?",a:["77"],e:"Width = 18 − 11 = 7, area = 11·7 = 77."}]}];
+const TESTS=[{id:"namuna-2",title:"Namuna test 2 · R&W va Math",sections:[
+{name:"Reading & Writing",minutes:8,calc:false,questions:[
+{t:"mc",topic:"Information and Ideas",p:"Marine biologist Lena Ortiz spent three summers recording humpback whale songs off the coast of Maui. She found that the whales did not repeat the same song each year. Instead, the males gradually changed their songs, and within a season nearly every male in the group had adopted the new version. Ortiz suggests that the shared song works as communication within the group rather than as a purely individual display.",q:"Which choice best states the main idea of the text?",o:["Humpback whales sing the same song every year.","Male humpback whales gradually change a song and then share it, which may serve as communication.","Ortiz plans to study whales in other oceans.","Humpback whales are the only whales that sing."],a:1,e:"The text describes songs that change and spread through the group, and Ortiz's idea that this is communication."},
+{t:"mc",topic:"Craft and Structure",p:"The architect's design was widely praised for its ______ use of space: every room had a clear purpose, and not a single square foot was wasted.",q:"Which choice completes the text with the most logical and precise word?",o:["economical","lavish","haphazard","ornamental"],a:0,e:"Nothing was wasted, so the use of space was economical."},
+{t:"mc",topic:"Standard English Conventions",p:"The team of researchers ______ publishing its findings next month.",q:"Which choice completes the text so that it conforms to the conventions of Standard English?",o:["are","is","were","have been"],a:1,e:"\"Team\" is a singular subject, so the verb is \"is\"."}]},
+{name:"Math",minutes:15,calc:true,questions:[
+{t:"mc",topic:"Algebra",q:"If 3x + 7 = 25, what is the value of x?",o:["4","6","8","18"],a:1,e:"3x = 18, so x = 6."},
+{t:"mc",topic:"Advanced Math",q:"The function f is defined by f(x) = x² − 3x + 2. What is the value of f(4)?",o:["2","4","6","10"],a:2,e:"f(4) = 16 − 12 + 2 = 6."},
+{t:"mc",topic:"Geometry and Trigonometry",q:"A pyramid has a square base with side length 6 and a height of 5. What is its volume?",o:["30","60","90","180"],a:1,e:"V = ⅓·(6·6)·5 = 60."},
+{t:"mc",topic:"Advanced Math",q:"Which expression is equivalent to (x + 4)²?",o:["x² + 16","x² + 8x + 16","x² + 4x + 16","x² + 8x + 8"],a:1,e:"(x+4)² = x² + 8x + 16."},
+{t:"spr",topic:"Algebra",q:"If 2(x − 3) = 14, what is the value of x?",a:["10"],e:"x − 3 = 7, so x = 10."},
+{t:"spr",topic:"Geometry and Trigonometry",q:"A rectangle has a perimeter of 36 and a length of 11. What is its area?",a:["77"],e:"Width = 18 − 11 = 7, area = 11·7 = 77."}]}]}];
+const flat=t=>t.sections.flatMap((c,si)=>c.questions.map(q=>({...q,si})));
+const sec=()=>S.secs[S.si];
+const tally=(tp,q,d)=>{const z=tp[q.topic||"Boshqa"]=tp[q.topic||"Boshqa"]||[0,0];z[1]++;if(d.ok)z[0]++};
+function topTbl(tp){const e=Object.entries(tp).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1]);return e.length?`<div class="scroll"><table><tr><th>Mavzu</th><th>To'g'ri</th><th>Foiz</th></tr>`+e.map(([k,z])=>`<tr><td>${esc(k)}</td><td>${z[0]}/${z[1]}</td><td><b>${Math.round(100*z[0]/z[1])}%</b></td></tr>`).join("")+`</table></div>`:""}
 /* ===== Holat ===== */
 const $=s=>document.querySelector(s),app=$("#app");
 let S={view:"home",tab:"tests",uid:null,back:"tests",name:"",test:null,timer:true,showClock:true,i:0,ans:[],cut:[],flag:[],left:0,tick:null,res:null,owner:false,db:null,results:[],note:""};
@@ -132,7 +147,7 @@ function render(){
   if(S.view!=="test")closeCalc();
   clearInterval(S.tick);
   if(S.view==="home")home();else if(S.view==="test")testView();else if(S.view==="result")resultView();
-  if(S.view==="test"&&S.timer){S.tick=setInterval(()=>{S.left=Math.round((S.end-Date.now())/1000);const c=$("#clk");if(c)c.textContent=fmt(Math.max(S.left,0));if(S.left<=0)finish()},1000)}
+  if(S.view==="test"&&S.timer){S.tick=setInterval(()=>{S.left=Math.round((S.end-Date.now())/1000);const c=$("#clk");if(c)c.textContent=fmt(Math.max(S.left,0));if(S.left<=0)nextSec()},1000)}
 }
 function home(){
   let h=`<div class="ocean" aria-hidden="true">${SCENE}</div><div class="wrap"><h1>SAT mashq testlari</h1><p class="mute">Uy ishi uchun testlar.</p>`;
@@ -143,22 +158,23 @@ function home(){
     h+=`</div>`;S._rs=rs;
   }else{
     h+=`<div class="card"><label for="nm"><b>Ismingiz</b></label><input id="nm" type="text" value="${esc(S.name)}" placeholder="Ism va familiya" autocomplete="name"></div>`;
-    h+=TESTS.map(t=>`<div class="card"><h2>${esc(t.title)}</h2><p class="mute">${t.questions.length} ta savol · tavsiya etilgan vaqt: ${t.minutes} daqiqa</p><button class="btn" data-start="${t.id}">Boshlash</button></div>`).join("");
+    h+=TESTS.map(t=>`<div class="card"><h2>${esc(t.title)}</h2><p class="mute">${flat(t).length} ta savol · ${t.sections.map(c=>c.name+" "+c.minutes+" daq").join(", ")}</p><button class="btn" data-start="${t.id}">Boshlash</button></div>`).join("");
   }
   app.innerHTML=h+`</div>`;
   app.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render()});
   const nm=$("#nm");if(nm)nm.oninput=e=>S.name=e.target.value;
   app.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{if(!S.name.trim()){nm.focus();nm.style.borderColor="var(--bad)";return}startDialog(b.dataset.start)});
-  app.querySelectorAll("tr[data-r]").forEach(tr=>tr.onclick=()=>{S.res=S._rs[tr.dataset.r];S.admin=S.tab==="admin";S.back=S.tab;S.note="";S.view="result";render()});
+  app.querySelectorAll("tr[data-r]").forEach(tr=>tr.onclick=()=>{S.res=S._rs[tr.dataset.r];S.admin=S.tab==="admin";S.back=S.tab;S.note="";S.ow=false;S.view="result";render()});
 }
 function mine(){
   const seen={},rs=[];
   [...S.results.filter(r=>S.uid&&r.uid===S.uid),...localResults()].forEach(r=>{if(!seen[r.id]){seen[r.id]=1;rs.push(r)}});
   rs.sort((a,b)=>b.at-a.at);S._rs=rs;
   if(!rs.length)return `<div class="card"><h2>Hali natija yo'q</h2><p class="mute">Test topshirgach, natijalaringiz shu yerda ko'rinadi.</p></div>`;
+  const tp={};rs.forEach(r=>{const t=TESTS.find(x=>x.id===r.testId);if(t&&r.det)flat(t).forEach((q,k)=>{if(r.det[k])tally(tp,q,r.det[k])})});
   const avg=Math.round(rs.reduce((x,r)=>x+r.score,0)/rs.length),best=Math.max(...rs.map(r=>r.score));
   const card=(v,l)=>`<div class="card" style="flex:1;min-width:120px;text-align:center;margin:0"><div class="big" style="font-size:34px">${v}</div><div class="mute">${l}</div></div>`;
-  return `<div class="panel"><h2>Mening natijalarim</h2><div style="display:flex;gap:10px;flex-wrap:wrap">${card(rs.length,"topshirilgan test")}${card(avg,"o'rtacha ball")}${card(best,"eng yaxshi ball")}</div><div class="scroll" style="margin-top:14px"><table><tr><th>Test</th><th>To'g'ri</th><th>Ball</th><th>Taymer</th><th>Sana</th></tr>`+rs.map((r,i)=>`<tr data-r="${i}" style="cursor:pointer"><td>${esc(r.title)}</td><td>${r.raw}/${r.n}</td><td><b>${r.score}</b></td><td>${r.timer?"bor":"yo'q"}</td><td>${new Date(r.at).toLocaleDateString("uz")}</td></tr>`).join("")+`</table></div><p class="mute">Qatorni bosing: javoblar va izohlar ochiladi.${S.db?"":" Natijalar faqat shu qurilmada saqlangan."}</p></div>`;
+  return `<div class="panel"><h2>Mening natijalarim</h2><div style="display:flex;gap:10px;flex-wrap:wrap">${card(rs.length,"topshirilgan test")}${card(avg,"o'rtacha ball")}${card(best,"eng yaxshi ball")}</div><div class="scroll" style="margin-top:14px"><table><tr><th>Test</th><th>To'g'ri</th><th>Ball</th><th>Taymer</th><th>Sana</th></tr>`+rs.map((r,i)=>`<tr data-r="${i}" style="cursor:pointer"><td>${esc(r.title)}</td><td>${r.raw}/${r.n}</td><td><b>${r.score}</b></td><td>${r.timer?"bor":"yo'q"}</td><td>${new Date(r.at).toLocaleDateString("uz")}</td></tr>`).join("")+`</table></div><p class="mute">Qatorni bosing: xatolar, mavzular va izohlar ochiladi.</p><h2 style="margin-top:18px">Mavzular bo'yicha (hamma testlar)</h2>${topTbl(tp)}<p class="mute">${S.db?"":" Natijalar faqat shu qurilmada saqlangan."}</p></div>`;
 }
 function dash(rs){
   if(!rs.length)return"";
@@ -169,7 +185,7 @@ function dash(rs){
   const pct=Math.round(100*rs.reduce((x,r)=>x+r.raw,0)/rs.reduce((x,r)=>x+r.n,0));
   let h=`<h2>Dashboard</h2><div style="display:flex;gap:10px;flex-wrap:wrap">${card(rs.length,"topshirilgan test")}${card(names.length,"o'quvchi")}${card(avg(rs.map(r=>r.score)),"o'rtacha ball")}${card(pct+"%","to'g'ri javoblar")}</div>`;
   h+=`<h2 style="margin-top:20px">Testlar bo'yicha</h2><div class="scroll"><table><tr><th>Test</th><th>Topshirdi</th><th>O'rtacha</th><th>Eng yuqori</th><th>Eng past</th></tr>`+tests.map(([,a])=>{const s=a.map(r=>r.score);return `<tr><td>${esc(a[0].title)}</td><td>${a.length}</td><td>${avg(s)}</td><td>${Math.max(...s)}</td><td>${Math.min(...s)}</td></tr>`}).join("")+`</table></div>`;
-  h+=tests.map(([id,a])=>{const t=TESTS.find(x=>x.id===id);if(!t)return"";const acc=t.questions.map((q,k)=>({k,p:Math.round(100*a.filter(r=>r.det&&r.det[k]&&r.det[k].ok).length/a.length)})).sort((x,y)=>x.p-y.p).slice(0,3);return `<p class="mute"><b>${esc(t.title)}</b>: eng qiyin savollar: `+acc.map(x=>`${x.k+1}-savol (${x.p}% to'g'ri)`).join(", ")+`</p>`}).join("");
+  h+=tests.map(([id,a])=>{const t=TESTS.find(x=>x.id===id);if(!t)return"";const acc=flat(t).map((q,k)=>({k,p:Math.round(100*a.filter(r=>r.det&&r.det[k]&&r.det[k].ok).length/a.length)})).sort((x,y)=>x.p-y.p).slice(0,3);return `<p class="mute"><b>${esc(t.title)}</b>: eng qiyin savollar: `+acc.map(x=>`${x.k+1}-savol (${x.p}% to'g'ri)`).join(", ")+`</p>`}).join("");
   h+=`<h2 style="margin-top:20px">O'quvchilar bo'yicha</h2><div class="scroll"><table><tr><th>Ism</th><th>Testlar</th><th>O'rtacha</th><th>Eng yaxshi</th><th>Oxirgi topshirgan</th></tr>`+names.map(([,a])=>{const s=a.map(r=>r.score),l=a.reduce((x,r)=>r.at>x.at?r:x);return `<tr><td>${esc(a[0].name)}</td><td>${a.length}</td><td>${avg(s)}</td><td>${Math.max(...s)}</td><td>${new Date(l.at).toLocaleDateString("uz")}</td></tr>`}).join("")+`</table></div>`;
   return h;
 }
@@ -186,6 +202,16 @@ function openCalc(){
   CP.innerHTML=`<div class="ch"><b>Desmos</b><button class="cutb" id="cx" aria-label="Yopish">\u2715</button></div><div id="dm" style="width:100%;height:calc(100% - 36px)"></div>`;
   document.body.appendChild(CP);
   CP.querySelector("#cx").onclick=()=>{CP.hidden=true};
+  const hd=CP.querySelector(".ch"),rz=document.createElement("div");rz.className="rz";rz.title="Hajmini o'zgartirish";CP.appendChild(rz);
+  const fit=()=>{try{CP._dm&&CP._dm.resize()}catch(e){}};
+  const pin=()=>{const r=CP.getBoundingClientRect();Object.assign(CP.style,{left:r.left+"px",top:r.top+"px",right:"auto",bottom:"auto",width:r.width+"px",height:r.height+"px",maxHeight:"none"});return r};
+  let dg=null,rs=null;
+  hd.onpointerdown=e=>{if(e.target.closest("button"))return;hd.setPointerCapture(e.pointerId);const r=pin();dg={x:e.clientX-r.left,y:e.clientY-r.top}};
+  hd.onpointermove=e=>{if(!dg)return;CP.style.left=Math.min(Math.max(e.clientX-dg.x,0),innerWidth-CP.offsetWidth)+"px";CP.style.top=Math.min(Math.max(e.clientY-dg.y,0),innerHeight-CP.offsetHeight)+"px"};
+  hd.onpointerup=hd.onpointercancel=()=>{dg=null};
+  rz.onpointerdown=e=>{e.stopPropagation();rz.setPointerCapture(e.pointerId);const r=pin();rs={x:e.clientX,y:e.clientY,w:r.width,h:r.height,l:r.left,t:r.top}};
+  rz.onpointermove=e=>{if(!rs)return;CP.style.width=Math.min(Math.max(rs.w+e.clientX-rs.x,260),innerWidth-rs.l)+"px";CP.style.height=Math.min(Math.max(rs.h+e.clientY-rs.y,240),innerHeight-rs.t)+"px";fit()};
+  rz.onpointerup=rz.onpointercancel=()=>{rs=null;fit()};
   const el=CP.querySelector("#dm");
   if(window.Desmos){CP._dm=Desmos.GraphingCalculator(el,{keypad:true,expressions:true,settingsMenu:false,zoomButtons:true})}
   else el.innerHTML='<p class="mute" style="padding:12px">Desmos yuklanmadi. Internetni tekshirib, sahifani yangilang.</p>';
@@ -194,64 +220,85 @@ function startDialog(id){
   const t=TESTS.find(x=>x.id===id);S.timer=true;
   const m=document.createElement("div");m.className="modal";
   m.innerHTML=`<div role="dialog" aria-label="Testni boshlash"><h2>${esc(t.title)}</h2><p class="mute">Taymerni yoqasizmi? Test boshlangach o'zgartirib bo'lmaydi.</p>
-  <label class="opt on" id="o1"><input type="radio" name="tm" checked> Taymer bilan (${t.minutes} daqiqa)</label>
+  <label class="opt on" id="o1"><input type="radio" name="tm" checked> Taymer bilan (${t.sections.map(c=>c.name+" "+c.minutes+" daq").join(", ")})</label>
   <label class="opt" id="o2"><input type="radio" name="tm"> Taymersiz</label>
   <p style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="cn">Bekor qilish</button><button class="btn" id="go">Testni boshlash</button></p></div>`;
   document.body.appendChild(m);
   const set=v=>{S.timer=v;$("#o1").classList.toggle("on",v);$("#o2").classList.toggle("on",!v)};
   $("#o1").onclick=()=>set(true);$("#o2").onclick=()=>set(false);
   $("#cn").onclick=()=>m.remove();
-  $("#go").onclick=()=>{m.remove();resetCalc();S.test=t;S.i=0;S.ans=t.questions.map(()=>null);S.cut=t.questions.map(()=>[]);S.flag=t.questions.map(()=>false);S.left=t.minutes*60;S.end=Date.now()+S.left*1000;S.showClock=true;S.view="test";render()};
+  $("#go").onclick=()=>{m.remove();resetCalc();const Q=flat(t);S.test=t;S.Q=Q;S.secs=[];let lo=0;t.sections.forEach(c=>{S.secs.push({name:c.name,calc:c.calc,min:c.minutes,lo,hi:lo+c.questions.length});lo+=c.questions.length});
+    S.perm=Q.map(q=>{const p=q.o?q.o.map((_,i)=>i):[];if(q.o&&!q.fix)for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p});
+    S.ans=Q.map(()=>null);S.cut=Q.map(()=>[]);S.flag=Q.map(()=>false);S.si=0;S.showClock=true;beginSec();S.view="test";render()};
 }
+function beginSec(){const c=sec();S.i=c.lo;S.left=c.min*60;S.end=Date.now()+S.left*1000;closeCalc()}
+function nextSec(){
+  if(S.view!=="test")return;
+  document.querySelectorAll(".modal").forEach(x=>x.remove());
+  if(S.si>=S.secs.length-1)return finish();
+  clearInterval(S.tick);closeCalc();
+  const c=S.secs[S.si+1],m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div role="dialog"><h2>${esc(sec().name)} tugadi</h2><p class="mute">Keyingi bo'lim: ${esc(c.name)}${S.timer?" ("+c.min+" daqiqa)":""}. Oldingi bo'limga qaytib bo'lmaydi.</p><p style="text-align:right"><button class="btn" id="g2">Davom etish</button></p></div>`;
+  document.body.appendChild(m);
+  $("#g2").onclick=()=>{m.remove();S.si++;beginSec();render()};
+}
+function refSheet(){const m=document.createElement("div");m.className="modal";m.innerHTML=`<div role="dialog"><h2>Formulalar</h2><p style="line-height:1.9">Doira: A = πr², C = 2πr<br>To'g'ri to'rtburchak: A = ℓw<br>Uchburchak: A = ½bh<br>Pifagor: c² = a² + b²<br>30°-60°-90°: tomonlar x, x√3, 2x<br>45°-45°-90°: tomonlar s, s, s√2<br>To'g'ri prizma: V = ℓwh<br>Silindr: V = πr²h<br>Shar: V = (4/3)πr³<br>Konus: V = (1/3)πr²h<br>Piramida: V = (1/3)ℓwh<br>Doirada 360° (2π radian). Uchburchak burchaklari yig'indisi 180°.</p><p style="text-align:right"><button class="btn" id="rx">Yopish</button></p></div>`;document.body.appendChild(m);$("#rx").onclick=()=>m.remove()}
 function testView(){
-  const t=S.test,q=t.questions[S.i],n=t.questions.length;
-  let b=`<div class="top"><div><b>${esc(t.title)}</b><div class="mute" style="font-size:14px">${esc(S.name)}</div></div>`;
+  const c=sec(),q=S.Q[S.i],n=c.hi-c.lo,k0=S.i-c.lo,last=S.i===c.hi-1;
+  let b=`<div class="top"><div><b>${esc(c.name)}</b><div class="mute" style="font-size:14px">${esc(S.name)}</div></div>`;
   b+=S.timer?`<div class="timer"><span id="clk" ${S.showClock?"":'hidden'}>${fmt(Math.max(S.left,0))}</span><button id="hc">${S.showClock?"Yashirish":"Ko'rsatish"}</button></div>`:`<div class="mute">Taymersiz</div>`;
-  b+=`<button class="btn ghost" id="cb" style="padding:6px 14px">Kalkulyator</button></div><div class="wrap"><div class="qhead"><span><span class="qnum">${S.i+1}</span> &nbsp;<button class="flag ${S.flag[S.i]?"on":""}" id="fl">⚑ ${S.flag[S.i]?"Belgilangan":"Ko'rib chiqish uchun belgilash"}</button></span></div><p>${esc(q.q)}</p>`;
-  if(q.t==="mc"){b+=q.o.map((o,k)=>`<div class="choice ${S.cut[S.i].includes(k)?"cut":""}"><label class="${S.ans[S.i]===k?"on":""}"><input type="radio" name="a" hidden ${S.ans[S.i]===k?"checked":""} data-k="${k}"><span class="letter">${L[k]}</span><span class="t">${esc(o)}</span></label><button class="cutb" data-c="${k}" title="Variantni chizib tashlash" aria-label="Variantni chizib tashlash">${S.cut[S.i].includes(k)?"↺":"✕"}</button></div>`).join("")}
+  b+=(c.calc?`<span><button class="btn ghost" id="rf" style="padding:6px 10px">Formulalar</button> <button class="btn ghost" id="cb" style="padding:6px 10px">Desmos</button></span>`:`<span></span>`)+`</div><div class="wrap${q.p?" wide":""}"><div class="qhead"><span><span class="qnum">${k0+1}</span> &nbsp;<button class="flag ${S.flag[S.i]?"on":""}" id="fl">⚑ ${S.flag[S.i]?"Belgilangan":"Ko'rib chiqish uchun belgilash"}</button></span></div><div class="${q.p?"two":""}">${q.p?`<div class="ps">${esc(q.p)}</div>`:""}<div><p>${esc(q.q)}</p>`;
+  if(q.t==="mc"){b+=S.perm[S.i].map((k,pos)=>{const o=q.o[k];return `<div class="choice ${S.cut[S.i].includes(k)?"cut":""}"><label class="${S.ans[S.i]===k?"on":""}"><input type="radio" name="a" hidden ${S.ans[S.i]===k?"checked":""} data-k="${k}"><span class="letter">${L[pos]}</span><span class="t">${esc(o)}</span></label><button class="cutb" data-c="${k}" title="Variantni chizib tashlash" aria-label="Variantni chizib tashlash">${S.cut[S.i].includes(k)?"↺":"✕"}</button></div>`}).join("")}
   else b+=`<p class="mute">Javobni o'zingiz yozing (butun son, kasr yoki o'nlik).</p><input type="text" id="sp" inputmode="decimal" value="${esc(S.ans[S.i]||"")}" placeholder="Javob"><p class="mute">Siz yozgan javob: <b>${esc(S.ans[S.i]||"—")}</b></p>`;
-  b+=`</div><div class="foot"><b>${esc(S.name)}</b><button class="btn ghost" id="qn">Savol ${S.i+1} / ${n} ▴</button><span><button class="btn ghost" id="pv" ${S.i===0?"disabled":""}>Orqaga</button> <button class="btn" id="nx">${S.i===n-1?"Yakunlash":"Keyingi"}</button></span></div>`;
+  b+=`</div></div></div><div class="foot"><b>${esc(S.name)}</b><button class="btn ghost" id="qn">Savol ${k0+1} / ${n} ▴</button><span><button class="btn ghost" id="pv" ${S.i===c.lo?"disabled":""}>Orqaga</button> <button class="btn" id="nx">${last?(S.si<S.secs.length-1?"Bo'limni yakunlash":"Yakunlash"):"Keyingi"}</button></span></div>`;
   app.innerHTML=b;
   const hc=$("#hc");if(hc)hc.onclick=()=>{S.showClock=!S.showClock;testView()};
   $("#fl").onclick=()=>{S.flag[S.i]=!S.flag[S.i];testView()};
   app.querySelectorAll("[data-k]").forEach(r=>r.onchange=()=>{S.ans[S.i]=+r.dataset.k;testView()});
-  app.querySelectorAll("[data-c]").forEach(c=>c.onclick=()=>{const k=+c.dataset.c,a=S.cut[S.i];a.includes(k)?a.splice(a.indexOf(k),1):a.push(k);if(S.ans[S.i]===k)S.ans[S.i]=null;testView()});
+  app.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{const k=+x.dataset.c,a=S.cut[S.i];a.includes(k)?a.splice(a.indexOf(k),1):a.push(k);if(S.ans[S.i]===k)S.ans[S.i]=null;testView()});
   const sp=$("#sp");if(sp)sp.oninput=e=>{S.ans[S.i]=e.target.value;sp.nextElementSibling.querySelector("b").textContent=e.target.value||"—"};
   $("#pv").onclick=()=>{S.i--;testView()};
-  $("#nx").onclick=()=>{S.i===n-1?review():(S.i++,testView())};
-  $("#qn").onclick=review;$("#cb").onclick=toggleCalc;
+  $("#nx").onclick=()=>{last?review():(S.i++,testView())};
+  $("#qn").onclick=review;
+  const cb=$("#cb");if(cb)cb.onclick=toggleCalc;const rf=$("#rf");if(rf)rf.onclick=refSheet;
 }
 function review(){
-  const t=S.test,n=t.questions.length,m=document.createElement("div");m.className="modal";
-  const un=S.ans.filter(a=>a===null||a==="").length;
-  m.innerHTML=`<div role="dialog"><h2>${esc(t.title)}</h2><p class="mute">Savolga o'tish uchun raqamni bosing.</p><div class="grid">${t.questions.map((_,k)=>`<button class="gn ${S.ans[k]!==null&&S.ans[k]!==""?"done":""} ${k===S.i?"cur":""} ${S.flag[k]?"fl":""}" data-g="${k}">${k+1}</button>`).join("")}</div>
+  const c=sec(),m=document.createElement("div");m.className="modal";
+  const un=S.ans.slice(c.lo,c.hi).filter(a=>a===null||a==="").length,fin=S.si>=S.secs.length-1;
+  m.innerHTML=`<div role="dialog"><h2>${esc(c.name)}</h2><p class="mute">Savolga o'tish uchun raqamni bosing.</p><div class="grid">${S.Q.slice(c.lo,c.hi).map((_,j)=>{const k=c.lo+j;return `<button class="gn ${S.ans[k]!==null&&S.ans[k]!==""?"done":""} ${k===S.i?"cur":""} ${S.flag[k]?"fl":""}" data-g="${k}">${j+1}</button>`}).join("")}</div>
   <p class="mute">${un?`Javobsiz savollar: ${un} ta.`:"Hamma savolga javob berildi."}</p>
-  <p style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="bk">Testga qaytish</button><button class="btn" id="fin">Topshirish</button></p></div>`;
+  <p style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="bk">Testga qaytish</button><button class="btn" id="fin">${fin?"Topshirish":"Bo'limni topshirish"}</button></p></div>`;
   document.body.appendChild(m);
   m.querySelectorAll("[data-g]").forEach(g=>g.onclick=()=>{S.i=+g.dataset.g;m.remove();testView()});
   $("#bk").onclick=()=>m.remove();
-  $("#fin").onclick=()=>{m.remove();finish()};
+  $("#fin").onclick=()=>{m.remove();nextSec()};
 }
 async function finish(){
   if(S.view!=="test")return;
-  S.view="busy";clearInterval(S.tick);
-  const t=S.test,n=t.questions.length;
-  const det=t.questions.map((q,k)=>({a:S.ans[k],ok:isOk(q,S.ans[k])}));
-  const raw=det.filter(d=>d.ok).length;
-  const r={id:Date.now()+"-"+Math.random().toString(36).slice(2,7),uid:S.uid||null,name:S.name.trim(),testId:t.id,title:t.title,raw,n,score:scaled(raw,n),timer:S.timer,at:Date.now(),det};
+  S.view="busy";clearInterval(S.tick);closeCalc();
+  const t=S.test,Q=S.Q;
+  const det=Q.map((q,k)=>({a:S.ans[k],ok:isOk(q,S.ans[k])}));
+  const secs=S.secs.map(c=>{const raw=det.slice(c.lo,c.hi).filter(d=>d.ok).length,n=c.hi-c.lo;return{name:c.name,raw,n,score:scaled(raw,n)}});
+  const raw=det.filter(d=>d.ok).length,n=Q.length,score=secs.length>1?secs.reduce((a,x)=>a+x.score,0):secs[0].score;
+  const r={id:Date.now()+"-"+Math.random().toString(36).slice(2,7),uid:S.uid||null,name:S.name.trim(),testId:t.id,title:t.title,raw,n,score,secs,timer:S.timer,at:Date.now(),det};
   app.innerHTML=`<div class="wrap"><p>Natija saqlanmoqda…</p></div>`;
   await saveResult(r);
-  S.res=r;S.admin=false;S.back="tests";S.view="result";render();
+  S.res=r;S.admin=false;S.back="tests";S.ow=false;S.view="result";render();
 }
 function resultView(){
-  const r=S.res,t=TESTS.find(x=>x.id===r.testId)||S.test;
-  let h=`<div class="wrap"><h1>${esc(r.name)}</h1><p class="mute">${esc(r.title)} · ${r.timer?"taymer bilan":"taymersiz"}</p>
-  <div class="card"><div class="big">${r.score}</div><p class="mute" style="margin:6px 0 0">taxminiy SAT balli (200–800) · to'g'ri javoblar: ${r.raw} / ${r.n}</p></div>`;
+  const r=S.res,t=TESTS.find(x=>x.id===r.testId),Q=t?flat(t):[],two=r.secs&&r.secs.length>1;
+  let h=`<div class="wrap wide"><h1>${esc(r.name)}</h1><p class="mute">${esc(r.title)} · ${r.timer?"taymer bilan":"taymersiz"}</p>
+  <div class="card"><div class="big">${r.score}</div><p class="mute" style="margin:6px 0 0">taxminiy SAT balli (${two?"400–1600":"200–800"}) · to'g'ri javoblar: ${r.raw} / ${r.n}</p>${two?`<p style="margin:8px 0 0">${r.secs.map(x=>`${esc(x.name)}: <b>${x.score}</b> (${x.raw}/${x.n})`).join(" · ")}</p>`:""}</div>`;
   if(S.note&&!S.admin)h+=`<p class="mute">${esc(S.note)}</p>`;
-  h+=t.questions.map((q,k)=>{const d=r.det[k],yours=d.a===null||d.a===""?"javob berilmagan":q.t==="mc"?L[d.a]+") "+q.o[d.a]:d.a,right=q.t==="mc"?L[q.a]+") "+q.o[q.a]:q.a[0];
-    return `<div class="rev ${d.ok?"r":"w"}"><b>${k+1}.</b> ${esc(q.q)}<br>Javob: <span class="${d.ok?"ok":"bad"}">${esc(yours)}</span>${d.ok?"":` · To'g'ri javob: <b>${esc(right)}</b>`}<br><span class="mute">${esc(q.e)}</span></div>`}).join("");
+  const tp={};Q.forEach((q,k)=>{if(r.det[k])tally(tp,q,r.det[k])});
+  h+=`<h2>Mavzular bo'yicha</h2>`+topTbl(tp);
+  const bad=r.det.filter(d=>!d.ok).length;
+  h+=`<h2 style="margin-top:20px">Savollar</h2><p><button class="btn ${S.ow?"ghost":""}" id="f0" style="padding:6px 16px">Hammasi</button> <button class="btn ${S.ow?"":"ghost"}" id="f1" style="padding:6px 16px">Faqat xatolar (${bad})</button></p>`+(S.ow&&!bad?`<p>Xato yo'q, barakalla.</p>`:"");
+  h+=Q.map((q,k)=>{const d=r.det[k];if(!d||(S.ow&&d.ok))return"";const yours=d.a===null||d.a===""?"javob berilmagan":q.t==="mc"?q.o[d.a]:d.a,right=q.t==="mc"?q.o[q.a]:q.a[0];
+    return `<div class="rev ${d.ok?"r":"w"}"><b>${k+1}.</b> <span class="chip">${esc(q.topic||"")}</span>${q.p?`<details><summary class="mute">Matn</summary><div class="ps">${esc(q.p)}</div></details>`:""}<div>${esc(q.q)}</div>Javob: <span class="${d.ok?"ok":"bad"}">${esc(yours)}</span>${d.ok?"":` · To'g'ri javob: <b>${esc(right)}</b>`}<br><span class="mute">${esc(q.e)}</span></div>`}).join("");
   h+=`<p><button class="btn" id="hm">Bosh sahifa</button></p></div>`;
   app.innerHTML=h;
+  $("#f0").onclick=()=>{S.ow=false;resultView()};$("#f1").onclick=()=>{S.ow=true;resultView()};
   $("#hm").onclick=()=>{S.view="home";S.tab=S.back||"tests";render()};
 }
 init();
